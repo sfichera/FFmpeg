@@ -34,6 +34,7 @@
 #endif
 #include <stdarg.h>
 #include <stdlib.h>
+#include <time.h>
 #include "avutil.h"
 #include "bprint.h"
 #include "common.h"
@@ -322,6 +323,13 @@ void av_log_default_callback(void* ptr, int level, const char* fmt, va_list vl)
 #endif
 
     format_line(ptr, level, fmt, vl, part, &print_prefix, type);
+    //SFICHERA 2017.02.20: Added timestamp to logger...
+    char buff[100];
+    time_t now = time (0);
+    strftime (buff, 100, "%Y-%m-%d %H:%M:%S.000", localtime (&now));
+    printf ("%s\n", buff);
+    //SFICHERA 2017.02.20: Added timestamp to logger...
+
     snprintf(line, sizeof(line), "%s%s%s%s", part[0].str, part[1].str, part[2].str, part[3].str);
 
 #if HAVE_ISATTY
