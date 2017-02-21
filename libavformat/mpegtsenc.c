@@ -1240,7 +1240,7 @@ static void mpegts_write_pes(AVFormatContext *s, AVStream *st,
             if (dts != AV_NOPTS_VALUE && dts < pcr / 300) {
                 av_log(s, AV_LOG_WARNING, "dts < pcr, TS is invalid\n");
                 //SFICHERA 2017.02.20: Exit on dts < pcr problem...
-                av_log(s, AV_LOG_VERBOSE, "dts=%d, pcr=%d, AV_NOPTS_VALUE=%d\n",dts, pcr, AV_NOPTS_VALUE);
+                av_log(s, AV_LOG_WARNING, "dts=%d, pcr=%d, AV_NOPTS_VALUE=%d\n",dts, pcr, AV_NOPTS_VALUE);
                 exit(1);
                 //SFICHERA 2017.02.20: Exit on dts < pcr problem...
             }
