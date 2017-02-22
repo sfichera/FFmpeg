@@ -293,9 +293,15 @@ int av_log_format_line2(void *ptr, int level, const char *fmt, va_list vl,
 {
     AVBPrint part[4];
     int ret;
+    //SFICHERA 2017.02.22: Added timestamp to logger...
+    char buff[100];
+    time_t now = time (0);
+    strftime (buff, 100, "%Y-%m-%d %H:%M:%S.000", localtime (&now));
+    //printf ("%s ::", buff);
+    //SFICHERA 2017.02.22: Added timestamp to logger...
 
     format_line(ptr, level, fmt, vl, part, print_prefix, NULL);
-    ret = snprintf(line, line_size, "%s%s%s%s", part[0].str, part[1].str, part[2].str, part[3].str);
+    ret = snprintf(line, line_size, "%s::%s%s%s%s", buff, part[0].str, part[1].str, part[2].str, part[3].str);
     av_bprint_finalize(part+3, NULL);
     return ret;
 }
@@ -323,14 +329,15 @@ void av_log_default_callback(void* ptr, int level, const char* fmt, va_list vl)
 #endif
 
     format_line(ptr, level, fmt, vl, part, &print_prefix, type);
-    //SFICHERA 2017.02.20: Added timestamp to logger...
+
+    //SFICHERA 2017.02.22: Added timestamp to logger...
     char buff[100];
     time_t now = time (0);
     strftime (buff, 100, "%Y-%m-%d %H:%M:%S.000", localtime (&now));
-    printf ("%s ::", buff);
-    //SFICHERA 2017.02.20: Added timestamp to logger...
+    //printf ("%s ::", buff);
+    //SFICHERA 2017.02.22: Added timestamp to logger...
 
-    snprintf(line, sizeof(line), "%s%s%s%s", part[0].str, part[1].str, part[2].str, part[3].str);
+    snprintf(line, sizeof(line), "%s::%s%s%s%s",buff, part[0].str, part[1].str, part[2].str, part[3].str);
 
 #if HAVE_ISATTY
     if (!is_atty)
